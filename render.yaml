@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: yakky-pr-studio
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: sqlite:////data/yakky.db
+      - key: SEED_DEMO_DATA
+        value: "1"
