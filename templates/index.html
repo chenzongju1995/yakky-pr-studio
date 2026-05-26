@@ -442,7 +442,7 @@ async function queryKDNiao(no, carrierName) {
   const hashBuffer = await crypto.subtle.digest('MD5', data).catch(() => null);
   // 浏览器不支持 MD5，改用代理服务
   // 直接调用快递鸟免费查询接口（需后端代理解决跨域）
-  // 这里使用 allorigins 代理
+  // 通过服务端代理调用快递鸟 API
   const params = new URLSearchParams({
     RequestData: encodeURIComponent(reqData),
     EBusinessID: KD_EBUSINESS_ID,
@@ -451,11 +451,10 @@ async function queryKDNiao(no, carrierName) {
     DataType: '2'
   });
   try {
-    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx');
-    const resp = await fetch(proxyUrl, {
+    const resp = await fetch('/api/track', {
       method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: params.toString()
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ShipperCode: shipperCode, LogisticCode: no})
     });
     const json = await resp.json();
     return json;
@@ -487,8 +486,7 @@ async function showTrack(no) {
   if (dataSign) {
     try {
       const params = 'RequestData='+encodeURIComponent(reqData)+'&EBusinessID='+KD_EBUSINESS_ID+'&RequestType=1002&DataSign='+encodeURIComponent(dataSign)+'&DataType=2';
-      const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx');
-      const resp = await fetch(proxyUrl, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:params});
+      const resp = await fetch('/api/track', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ShipperCode: shipperCode, LogisticCode: no})});
       const json = await resp.json();
       if (json.Success && json.Traces) traces = json.Traces;
     } catch(e) {}
