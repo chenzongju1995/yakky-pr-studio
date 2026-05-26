@@ -1,65 +1,53 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YAKKY PR Studio - 样衣管理系统</title>
-<link href="https://cdn.jsdelivr.net/npm/@tabler/icons@2.47.0/iconfont/tabler-icons.min.css" rel="stylesheet">
+<title>YAKKY PR Studio</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.4.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js"></script>
 <style>
-:root {
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "SF Mono", "Fira Code", monospace;
-  --color-text-primary: #1a1a2e;
-  --color-text-secondary: #6b7280;
-  --color-text-tertiary: #9ca3af;
-  --color-background-primary: #ffffff;
-  --color-background-secondary: #f8f9fa;
-  --color-background-tertiary: #f3f4f6;
-  --color-border-secondary: #d1d5db;
-  --color-border-tertiary: #e5e7eb;
-  --border-radius-md: 8px;
-  --border-radius-lg: 12px;
-}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);background:var(--color-background-tertiary)}
-.app{display:flex;min-height:100vh;color:var(--color-text-primary)}
-.sidebar{width:196px;flex-shrink:0;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column}
-.logo{padding:14px 16px 12px;border-bottom:0.5px solid var(--color-border-tertiary)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F5F4F0;color:#1a1a1a;font-size:13px}
+.app{display:flex;min-height:100vh}
+.sidebar{width:196px;flex-shrink:0;background:#fff;border-right:0.5px solid rgba(0,0,0,0.1);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:10}
+.logo{padding:14px 16px 12px;border-bottom:0.5px solid rgba(0,0,0,0.08)}
 .logo-title{font-size:14px;font-weight:500;letter-spacing:-0.2px}
-.logo-sub{font-size:10px;color:var(--color-text-secondary);margin-top:1px;letter-spacing:0.5px}
-.nav-item{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);border-left:2px solid transparent;transition:all 0.12s}
-.nav-item:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
-.nav-item.active{color:var(--color-text-primary);background:var(--color-background-secondary);border-left-color:#534AB7;font-weight:500}
+.logo-sub{font-size:10px;color:#888;margin-top:1px;letter-spacing:0.5px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:13px;cursor:pointer;color:#888;border-left:2px solid transparent;transition:all 0.12s}
+.nav-item:hover{background:#f5f4f0;color:#1a1a1a}
+.nav-item.active{color:#1a1a1a;background:#f5f4f0;border-left-color:#534AB7;font-weight:500}
 .nav-item i{font-size:15px}
-.sidebar-footer{margin-top:auto;padding:12px 16px;border-top:0.5px solid var(--color-border-tertiary)}
-.main{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.sidebar-footer{margin-top:auto;padding:12px 16px;border-top:0.5px solid rgba(0,0,0,0.08)}
+.main{flex:1;margin-left:196px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .topbar{display:flex;align-items:center;gap:8px}
 .topbar h1{font-size:17px;font-weight:500;flex:1}
-.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;font-size:12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;color:var(--color-text-primary);transition:background 0.12s;font-family:var(--font-sans)}
-.btn:hover{background:var(--color-background-secondary)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;font-size:12px;border:0.5px solid rgba(0,0,0,0.2);border-radius:8px;background:#fff;cursor:pointer;color:#1a1a1a;transition:background 0.12s;font-family:inherit}
+.btn:hover{background:#f5f4f0}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
 .btn-primary{background:#534AB7;color:#EEEDFE;border-color:#534AB7}
 .btn-primary:hover{background:#3C3489}
 .btn-danger{background:#FCEBEB;color:#A32D2D;border-color:#F09595}
 .btn-danger:hover{background:#F7C1C1}
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px}
-.stat-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px}
+.stat-card{background:#EEEDE8;border-radius:8px;padding:12px}
+.stat-label{font-size:11px;color:#888;margin-bottom:3px}
 .stat-value{font-size:20px;font-weight:500}
-.stat-delta{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
-.panel{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg)}
-.panel-header{padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
+.stat-delta{font-size:11px;color:#888;margin-top:2px}
+.panel{background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px}
+.panel-header{padding:10px 14px;border-bottom:0.5px solid rgba(0,0,0,0.08);display:flex;align-items:center;gap:8px}
 .panel-title{font-size:13px;font-weight:500;flex:1}
-.search-wrap{display:flex;align-items:center;gap:6px;padding:5px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary)}
-.search-wrap input{border:none;background:none;outline:none;font-size:12px;color:var(--color-text-primary);width:140px;font-family:var(--font-sans)}
+.search-wrap{display:flex;align-items:center;gap:6px;padding:5px 10px;border:0.5px solid rgba(0,0,0,0.15);border-radius:8px;background:#f5f4f0}
+.search-wrap input{border:none;background:none;outline:none;font-size:12px;color:#1a1a1a;width:140px;font-family:inherit}
 .filter-row{display:flex;gap:6px;flex-wrap:wrap}
-.ftag{padding:3px 10px;border-radius:20px;font-size:11px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);transition:all 0.12s}
+.ftag{padding:3px 10px;border-radius:20px;font-size:11px;cursor:pointer;border:0.5px solid rgba(0,0,0,0.12);background:#f5f4f0;color:#888;transition:all 0.12s}
 .ftag.active{background:#EEEDFE;color:#3C3489;border-color:#AFA9EC}
 .tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
-th{text-align:left;padding:7px 12px;font-size:11px;font-weight:500;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap}
-td{padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+th{text-align:left;padding:7px 12px;font-size:11px;font-weight:500;color:#888;border-bottom:0.5px solid rgba(0,0,0,0.08);white-space:nowrap}
+td{padding:9px 12px;border-bottom:0.5px solid rgba(0,0,0,0.06);vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--color-background-secondary)}
+tr:hover td{background:#f9f9f7}
 .sbadge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
 .s-in{background:#EAF3DE;color:#27500A}
 .s-lent{background:#FAEEDA;color:#633806}
@@ -67,40 +55,55 @@ tr:hover td{background:var(--color-background-secondary)}
 .s-ov{background:#FCEBEB;color:#791F1F}
 .dot{width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block}
 .iname{font-weight:500;font-size:12px}
-.icode{font-size:10px;color:var(--color-text-secondary)}
+.icode{font-size:10px;color:#888}
 .avatar{width:26px;height:26px;border-radius:50%;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#3C3489;flex-shrink:0}
-.progress-bar{height:3px;border-radius:2px;background:var(--color-background-secondary);overflow:hidden;margin-top:5px}
+.progress-bar{height:3px;border-radius:2px;background:#eee;overflow:hidden;margin-top:5px}
 .progress-fill{height:100%;border-radius:2px;background:#534AB7}
-.page-tabs{display:flex;border-bottom:0.5px solid var(--color-border-tertiary);padding:0 14px}
-.ptab{padding:8px 12px;font-size:12px;cursor:pointer;border-bottom:2px solid transparent;color:var(--color-text-secondary);transition:all 0.12s}
-.ptab.active{color:var(--color-text-primary);border-bottom-color:#534AB7;font-weight:500}
+.page-tabs{display:flex;border-bottom:0.5px solid rgba(0,0,0,0.08);padding:0 14px}
+.ptab{padding:8px 12px;font-size:12px;cursor:pointer;border-bottom:2px solid transparent;color:#888;transition:all 0.12s}
+.ptab.active{color:#1a1a1a;border-bottom-color:#534AB7;font-weight:500}
 .eff-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
-.eff-item{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px}
+.eff-item{background:#f5f4f0;border-radius:8px;padding:10px}
 .eff-num{font-size:18px;font-weight:500}
-.eff-desc{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.eff-desc{font-size:11px;color:#888;margin-top:2px}
 .chart-bars{display:flex;align-items:flex-end;gap:6px;height:72px}
 .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
 .bar{width:100%;border-radius:2px 2px 0 0;background:#AFA9EC;min-height:2px}
 .bar.hi{background:#534AB7}
-.bar-lbl{font-size:10px;color:var(--color-text-secondary)}
 .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
-.ccard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;transition:border-color 0.12s;cursor:pointer}
+.ccard{background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:14px;transition:border-color 0.12s;cursor:pointer}
 .ccard:hover{border-color:#AFA9EC}
 .track-step{display:flex;gap:10px;padding-bottom:14px;position:relative}
-.track-step:not(:last-child)::after{content:'';position:absolute;left:14px;top:26px;bottom:0;width:1px;background:var(--color-border-tertiary)}
+.track-step:not(:last-child)::after{content:'';position:absolute;left:14px;top:26px;bottom:0;width:1px;background:rgba(0,0,0,0.08)}
 .tdot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
 .tdot.done{background:#EAF3DE;color:#3B6D11}
 .tdot.act{background:#E6F1FB;color:#185FA5}
-.tdot.pend{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
-.toast-msg{position:fixed;bottom:16px;right:16px;background:#534AB7;color:#EEEDFE;padding:8px 14px;border-radius:var(--border-radius-md);font-size:12px;opacity:0;transition:opacity 0.2s;pointer-events:none;z-index:9999}
-.toast-msg.show{opacity:1}
-.modal input, .modal select, .modal textarea { font-family: var(--font-sans); }
+.tdot.pend{background:#f0f0f0;color:#aaa}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.38);align-items:center;justify-content:center;z-index:100}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:12px;border:0.5px solid rgba(0,0,0,0.1);width:460px;max-width:90vw}
+.modal-hd{padding:14px 18px;border-bottom:0.5px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between}
+.modal-bd{padding:18px;display:flex;flex-direction:column;gap:12px}
+.modal-ft{padding:10px 18px;border-top:0.5px solid rgba(0,0,0,0.08);display:flex;justify-content:flex-end;gap:8px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fl{font-size:11px;color:#888;font-weight:500}
+.fi{padding:7px 10px;border:0.5px solid rgba(0,0,0,0.15);border-radius:8px;font-size:12px;background:#fff;color:#1a1a1a;outline:none;font-family:inherit}
+.fi:focus{border-color:#534AB7}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.toast{position:fixed;bottom:20px;right:20px;background:#534AB7;color:#EEEDFE;padding:8px 14px;border-radius:8px;font-size:12px;opacity:0;transition:opacity 0.2s;pointer-events:none;z-index:200}
+.toast.show{opacity:1}
+.loading{display:flex;align-items:center;justify-content:center;padding:40px;color:#888;font-size:13px;gap:8px}
+.spinner{width:16px;height:16px;border:2px solid #e0e0e0;border-top-color:#534AB7;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sync-indicator{display:flex;align-items:center;gap:5px;font-size:11px;color:#888;padding:4px 8px;border-radius:20px;background:#f5f4f0}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:#3B6D11}
+.sync-dot.syncing{background:#EF9F27;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 </style>
 </head>
 <body>
 
 <div class="app" id="app">
-
 <div class="sidebar">
   <div class="logo">
     <div class="logo-title">YAKKY PR Studio</div>
@@ -114,20 +117,22 @@ tr:hover td{background:var(--color-background-secondary)}
     <div class="nav-item" id="nav-contacts" onclick="go('contacts')"><i class="ti ti-users"></i> 联系人</div>
   </div>
   <div class="sidebar-footer">
-    <div style="font-size:11px;color:var(--color-text-secondary)">样衣总量</div>
-    <div style="font-size:17px;font-weight:500" id="total-count">0 件</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div style="font-size:11px;color:#888">样衣总量</div>
+      <div class="sync-indicator"><div class="sync-dot" id="sync-dot"></div><span id="sync-label">已同步</span></div>
+    </div>
+    <div style="font-size:17px;font-weight:500" id="total-count">— 件</div>
     <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
-    <div style="font-size:10px;color:var(--color-text-secondary);margin-top:4px" id="prog-label"></div>
+    <div style="font-size:10px;color:#888;margin-top:4px" id="prog-label">加载中...</div>
   </div>
 </div>
 
 <div class="main" id="main">
 
-  <!-- Inventory Page -->
   <div id="pg-inventory">
     <div class="topbar">
       <h1>样衣库存</h1>
-      <div class="search-wrap"><i class="ti ti-search" style="font-size:13px;color:var(--color-text-secondary)"></i><input type="text" id="inv-q" placeholder="搜索名称/编号…" oninput="renderInv()"></div>
+      <div class="search-wrap"><i class="ti ti-search" style="font-size:13px;color:#aaa"></i><input type="text" id="inv-q" placeholder="搜索名称/编号…" oninput="renderInv()"></div>
       <button class="btn btn-primary" onclick="openModal('add-item')"><i class="ti ti-plus"></i> 添加样衣</button>
     </div>
     <div class="filter-row" id="inv-filters">
@@ -142,13 +147,12 @@ tr:hover td{background:var(--color-background-secondary)}
         <table>
           <colgroup><col style="width:200px"><col style="width:70px"><col style="width:50px"><col style="width:50px"><col style="width:90px"><col style="width:120px"><col style="width:90px"><col style="width:110px"></colgroup>
           <thead><tr><th>样衣</th><th>品类</th><th>尺码</th><th>颜色</th><th>状态</th><th>借用方</th><th>到期日</th><th>操作</th></tr></thead>
-          <tbody id="inv-body"></tbody>
+          <tbody id="inv-body"><tr><td colspan="8"><div class="loading"><div class="spinner"></div>加载中...</div></td></tr></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- Loans Page -->
   <div id="pg-loans" style="display:none">
     <div class="topbar">
       <h1>借用管理</h1>
@@ -164,498 +168,556 @@ tr:hover td{background:var(--color-background-secondary)}
         <table>
           <colgroup><col style="width:90px"><col style="width:130px"><col style="width:110px"><col style="width:55px"><col style="width:85px"><col style="width:85px"><col style="width:110px"><col style="width:80px"><col style="width:80px"></colgroup>
           <thead><tr><th>编号</th><th>样衣</th><th>借用方</th><th>类型</th><th>借出日</th><th>到期日</th><th>快递单号</th><th>状态</th><th>操作</th></tr></thead>
-          <tbody id="loans-body"></tbody>
+          <tbody id="loans-body"><tr><td colspan="9"><div class="loading"><div class="spinner"></div>加载中...</div></td></tr></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- Tracking Page -->
   <div id="pg-tracking" style="display:none">
     <div class="topbar"><h1>快递追踪</h1><button class="btn" onclick="openModal('add-track')"><i class="ti ti-plus"></i> 添加单号</button></div>
     <div style="display:grid;grid-template-columns:1fr 300px;gap:14px">
       <div class="panel">
-        <div class="panel-header"><span class="panel-title">运单列表</span></div>
+        <div class="panel-header"><span class="panel-title">运单列表</span><button class="btn" style="font-size:11px;padding:3px 8px" onclick="loadTrackings()"><i class="ti ti-refresh"></i> 刷新</button></div>
         <div class="tbl-wrap">
           <table>
             <colgroup><col style="width:110px"><col style="width:70px"><col style="width:70px"><col style="width:70px"><col style="width:90px"><col style="width:80px"><col style="width:80px"></colgroup>
             <thead><tr><th>运单号</th><th>快递</th><th>寄件方</th><th>收件方</th><th>样衣</th><th>状态</th><th>操作</th></tr></thead>
-            <tbody id="track-body"></tbody>
+            <tbody id="track-body"><tr><td colspan="7"><div class="loading"><div class="spinner"></div>加载中...</div></td></tr></tbody>
           </table>
         </div>
       </div>
-      <div class="panel"><div class="panel-header"><span class="panel-title">物流详情</span></div><div id="track-detail" style="padding:14px"></div></div>
+      <div class="panel"><div class="panel-header"><span class="panel-title">物流详情</span></div><div id="track-detail" style="padding:14px;color:#aaa;font-size:12px">点击左侧运单查看详情</div></div>
     </div>
   </div>
 
-  <!-- Stats Page -->
   <div id="pg-stats" style="display:none">
     <div class="topbar"><h1>效率统计</h1></div>
-    <div class="stats-row" id="stats-cards"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-      <div class="panel">
-        <div class="panel-header"><span class="panel-title">月流转趋势</span></div>
-        <div style="padding:14px">
-          <div class="chart-bars" id="chart-bars"></div>
-          <div style="display:flex;justify-content:space-between;margin-top:4px">
-            <span style="font-size:10px;color:var(--color-text-secondary)">12月</span>
-            <span style="font-size:10px;color:var(--color-text-secondary)">1月</span>
-            <span style="font-size:10px;color:var(--color-text-secondary)">2月</span>
-            <span style="font-size:10px;color:var(--color-text-secondary)">3月</span>
-            <span style="font-size:10px;color:var(--color-text-secondary)">4月</span>
-            <span style="font-size:10px;color:var(--color-text-secondary)">5月</span>
-          </div>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="panel-header"><span class="panel-title">效率指标</span></div>
-        <div class="eff-grid">
-          <div class="eff-item"><div class="eff-num">8.3h</div><div class="eff-desc">平均发货时效</div></div>
-          <div class="eff-item"><div class="eff-num">2.1天</div><div class="eff-desc">平均快递时效</div></div>
-          <div class="eff-item"><div class="eff-num">94%</div><div class="eff-desc">按时归还率</div></div>
-          <div class="eff-item"><div class="eff-num">18件</div><div class="eff-desc">高频借用样衣</div></div>
-        </div>
-      </div>
+    <div class="stats-row" id="stats-kpi">
+      <div class="stat-card"><div class="stat-label">样衣总量</div><div class="stat-value" id="kpi-total">—</div></div>
+      <div class="stat-card"><div class="stat-label">当前在库</div><div class="stat-value" style="color:#27500A" id="kpi-in">—</div></div>
+      <div class="stat-card"><div class="stat-label">外借中</div><div class="stat-value" style="color:#633806" id="kpi-lent">—</div></div>
+      <div class="stat-card"><div class="stat-label">逾期未还</div><div class="stat-value" style="color:#791F1F" id="kpi-overdue">—</div></div>
     </div>
     <div class="panel">
-      <div class="panel-header"><span class="panel-title">借用方排行</span></div>
+      <div class="panel-header"><span class="panel-title">借用记录</span></div>
       <table>
-        <thead><tr><th>借用方</th><th>类型</th><th>借用次数</th><th>平均归还周期</th><th>逾期次数</th><th>评级</th></tr></thead>
+        <thead><tr><th>借用方</th><th>类型</th><th>借用次数</th><th>评级</th></tr></thead>
         <tbody id="stats-body"></tbody>
       </table>
     </div>
   </div>
 
-  <!-- Contacts Page -->
   <div id="pg-contacts" style="display:none">
     <div class="topbar"><h1>联系人</h1><button class="btn btn-primary" onclick="openModal('add-contact')"><i class="ti ti-user-plus"></i> 添加联系人</button></div>
-    <div class="contact-grid" id="contact-grid"></div>
+    <div class="contact-grid" id="contact-grid"><div class="loading"><div class="spinner"></div>加载中...</div></div>
   </div>
 
 </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="mainModal" tabindex="-1">
-  <div class="modal-dialog"><div class="modal-content">
-    <div class="modal-header"><h5 class="modal-title" id="m-title"></h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
-    <div class="modal-body" id="m-body"></div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+<div class="modal-overlay" id="modal-overlay" onclick="bgClick(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hd">
+      <span style="font-size:14px;font-weight:500" id="m-title"></span>
+      <button class="btn" style="padding:3px 7px;border:none" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-bd" id="m-body"></div>
+    <div class="modal-ft">
+      <button class="btn" onclick="closeModal()">取消</button>
       <button class="btn btn-primary" id="m-confirm" onclick="confirmModal()">确认</button>
     </div>
-  </div></div>
+  </div>
 </div>
 
-<div class="toast-msg" id="toast"></div>
+<div class="toast" id="toast"></div>
 
 <script>
-// ========== State ==========
-var items = [];
-var loans = [];
-var trackings = [];
-var contacts = [];
-var statsCache = null;
-var invFilter = 'all';
-var loanTab = 'active';
-var modalAction = '';
-var bsModal = null;
+const SUPABASE_URL = 'https://dysdjabqhixeinfazsfy.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5c2RqYWJxaGl4ZWluZmF6c2Z5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3Njk5ODAsImV4cCI6MjA5NTM0NTk4MH0.lvSrhOTC_SeKLr3kIb-pJvkANZl8Ap8XpOC7Ngx4avg';
 
-document.addEventListener('DOMContentLoaded', function() {
-  bsModal = new bootstrap.Modal(document.getElementById('mainModal'));
-  loadAll();
-});
+const headers = {
+  'Content-Type': 'application/json',
+  'apikey': SUPABASE_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_KEY,
+  'Prefer': 'return=representation'
+};
 
-function api(url, opts) {
-  if (!opts) opts = {};
-  return fetch(url, {
-    method: opts.method || 'GET',
-    headers: {'Content-Type': 'application/json'},
-    body: opts.body ? JSON.stringify(opts.body) : undefined
-  }).then(function(r) {
-    if (!r.ok) return r.json().then(function(e) { throw new Error(e.error || '请求失败'); });
-    return r.json();
-  });
+async function db(table, method, body, query) {
+  setSyncing(true);
+  try {
+    let url = SUPABASE_URL + '/rest/v1/' + table;
+    if (query) url += '?' + query;
+    const opts = { method: method || 'GET', headers };
+    if (body) opts.body = JSON.stringify(body);
+    const r = await fetch(url, opts);
+    if (!r.ok) {
+      const err = await r.text();
+      throw new Error(err);
+    }
+    const data = method === 'DELETE' ? [] : await r.json();
+    setSyncing(false);
+    return data;
+  } catch(e) {
+    setSyncing(false);
+    toast('同步失败: ' + e.message);
+    throw e;
+  }
 }
 
-// ========== Data Loading ==========
-function loadAll() {
-  Promise.all([
-    api('/api/samples').then(function(d) { items = d; }),
-    api('/api/loans').then(function(d) { loans = d; }),
-    api('/api/trackings').then(function(d) { trackings = d; }),
-    api('/api/contacts').then(function(d) { contacts = d; }),
-    api('/api/stats').then(function(d) { statsCache = d; })
-  ]).then(function() {
-    renderInv();
-  }).catch(function(e) {
-    console.error(e);
-    renderInv();
-  });
+function setSyncing(on) {
+  const d = document.getElementById('sync-dot');
+  const l = document.getElementById('sync-label');
+  if (d) d.className = 'sync-dot' + (on ? ' syncing' : '');
+  if (l) l.textContent = on ? '同步中' : '已同步';
 }
 
-// ========== Badge ==========
+var items = [], loans = [], trackings = [], contacts = [];
+var invFilter = 'all', loanTab = 'active', modalAction = '';
+
 function badge(s) {
-  var m = {
-    in: {l:'在库', c:'s-in'}, lent: {l:'外借中', c:'s-lent'}, transit: {l:'快递中', c:'s-tr'},
-    overdue: {l:'已逾期', c:'s-ov'}, active: {l:'进行中', c:'s-lent'}, returned: {l:'已归还', c:'s-in'},
-    delivered: {l:'已签收', c:'s-in'}, abnormal: {l:'派送异常', c:'s-ov'}
-  };
-  var x = m[s] || {l: s, c: 's-in'};
-  return '<span class="sbadge ' + x.c + '"><span class="dot"></span>' + x.l + '</span>';
+  const m = {in:{l:'在库',c:'s-in'},lent:{l:'外借中',c:'s-lent'},transit:{l:'快递中',c:'s-tr'},overdue:{l:'已逾期',c:'s-ov'},active:{l:'进行中',c:'s-lent'},returned:{l:'已归还',c:'s-in'},delivered:{l:'已签收',c:'s-in'},abnormal:{l:'派送异常',c:'s-ov'}};
+  const x = m[s] || {l:s,c:'s-in'};
+  return '<span class="sbadge '+x.c+'"><span class="dot"></span>'+x.l+'</span>';
 }
 
 function updateSidebar() {
-  var total = items.length;
-  var inStock = items.filter(function(x) { return x.status === 'in'; }).length;
+  const total = items.length;
+  const inStock = items.filter(x => x.status === 'in').length;
   document.getElementById('total-count').textContent = total + ' 件';
-  var pct = total > 0 ? Math.round((total - inStock) / total * 100) : 0;
+  const pct = total > 0 ? Math.round((total - inStock) / total * 100) : 0;
   document.getElementById('prog-fill').style.width = pct + '%';
   document.getElementById('prog-label').textContent = inStock + '件在库 · ' + (total - inStock) + '件外借/在途';
 }
 
-// ========== Inventory ==========
+async function loadItems() {
+  items = await db('items', 'GET', null, 'order=created_at.desc');
+  renderInv();
+}
+
+async function loadLoans() {
+  loans = await db('loans', 'GET', null, 'order=created_at.desc');
+  renderLoans();
+}
+
+async function loadTrackings() {
+  trackings = await db('trackings', 'GET', null, 'order=created_at.desc');
+  renderTracking();
+}
+
+async function loadContacts() {
+  contacts = await db('contacts', 'GET', null, 'order=created_at.desc');
+  renderContacts();
+}
+
 function renderInv() {
-  var q = (document.getElementById('inv-q') || {value: ''}).value.toLowerCase();
-  var rows = items.filter(function(it) {
+  const q = (document.getElementById('inv-q') || {value:''}).value.toLowerCase();
+  const rows = items.filter(it => {
     if (q && !it.name.toLowerCase().includes(q) && !it.id.toLowerCase().includes(q)) return false;
     if (invFilter === 'all') return true;
     return it.status === invFilter;
   });
-  var html = rows.map(function(it) {
-    return '<tr><td><div style="display:flex;align-items:center;gap:8px"><div style="width:30px;height:30px;border-radius:6px;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">&#x1F457;</div><div><div class="iname">' + esc(it.name) + '</div><div class="icode">' + esc(it.id) + '</div></div></div></td>'
-      + '<td>' + esc(it.cat) + '</td><td>' + esc(it.size) + '</td><td>' + esc(it.color) + '</td>'
-      + '<td>' + badge(it.status) + '</td>'
-      + '<td style="color:var(--color-text-secondary)">' + (it.borrower || '—') + '</td>'
-      + '<td style="color:' + (it.status === 'overdue' ? '#791F1F' : 'var(--color-text-secondary)') + '">' + (it.due || '—') + '</td>'
-      + '<td><div style="display:flex;gap:4px">'
-      + '<button class="btn" style="padding:2px 7px;font-size:11px" onclick="openLend(\'' + esc(it.id) + '\')" title="借出"><i class="ti ti-arrow-right"></i></button>'
-      + '<button class="btn btn-danger" style="padding:2px 7px;font-size:11px" onclick="deleteItem(' + it._id + ')" title="删除"><i class="ti ti-trash"></i></button>'
-      + '</div></td></tr>';
-  }).join('');
-  document.getElementById('inv-body').innerHTML = html || '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--color-text-secondary)">暂无数据</td></tr>';
+  const html = rows.map(it =>
+    '<tr><td><div style="display:flex;align-items:center;gap:8px"><div style="width:30px;height:30px;border-radius:6px;background:#f0f0ee;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">👗</div><div><div class="iname">'+it.name+'</div><div class="icode">'+it.id+'</div></div></div></td>'
+    +'<td>'+it.cat+'</td><td>'+it.size+'</td><td>'+it.color+'</td>'
+    +'<td>'+badge(it.status)+'</td>'
+    +'<td style="color:#888">'+(it.borrower||'—')+'</td>'
+    +'<td style="color:'+(it.status==='overdue'?'#791F1F':'#888')+'">'+(it.due||'—')+'</td>'
+    +'<td><div style="display:flex;gap:4px">'
+    +'<button class="btn" style="padding:2px 7px;font-size:11px" onclick="openLend(\''+it.id+'\')"><i class="ti ti-arrow-right"></i></button>'
+    +'<button class="btn btn-danger" style="padding:2px 7px;font-size:11px" onclick="deleteItem(\''+it.id+'\')"><i class="ti ti-trash"></i></button>'
+    +'</div></td></tr>'
+  ).join('');
+  document.getElementById('inv-body').innerHTML = html || '<tr><td colspan="8" style="text-align:center;padding:24px;color:#aaa">暂无数据</td></tr>';
   updateSidebar();
 }
 
 function setF(f, el) {
   invFilter = f;
-  document.querySelectorAll('#inv-filters .ftag').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('#inv-filters .ftag').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   renderInv();
 }
 
-function deleteItem(dbid) {
-  if (!confirm('确认删除该样衣？')) return;
-  api('/api/samples/' + dbid, {method: 'DELETE'}).then(function() {
-    items = items.filter(function(x) { return x._id !== dbid; });
-    renderInv();
-    toast('已删除样衣');
-  }).catch(function(e) { toast('删除失败: ' + e.message); });
+async function deleteItem(id) {
+  if (!confirm('确认删除样衣 ' + id + '？')) return;
+  await db('items', 'DELETE', null, 'id=eq.' + encodeURIComponent(id));
+  items = items.filter(x => x.id !== id);
+  renderInv();
+  toast('已删除样衣 ' + id);
 }
 
 function openLend(id) {
-  var it = items.find(function(x) { return x.id === id; });
+  const it = items.find(x => x.id === id);
   if (!it || it.status !== 'in') { toast('该样衣当前不在库，无法借出'); return; }
   openModal('lend-item');
   document.getElementById('lend-item-id').value = id;
 }
 
-// ========== Loans ==========
 function renderLoans() {
-  var rows = loans.filter(function(l) { return l.status === loanTab; });
-  var html = rows.map(function(l) {
-    return '<tr><td style="font-family:var(--font-mono);font-size:10px;color:var(--color-text-secondary)">' + esc(l.id) + '</td>'
-      + '<td>' + esc(l.item) + '</td>'
-      + '<td><div style="display:flex;align-items:center;gap:5px"><div class="avatar">' + esc(l.borrower.charAt(0)) + '</div><span>' + esc(l.borrower) + '</span></div></td>'
-      + '<td>' + esc(l.type) + '</td>'
-      + '<td style="color:var(--color-text-secondary)">' + esc(l.lend) + '</td>'
-      + '<td style="color:' + (l.status === 'overdue' ? '#791F1F' : 'var(--color-text-secondary)') + '">' + esc(l.due) + '</td>'
-      + '<td style="font-family:var(--font-mono);font-size:10px">' + esc(l.track) + '</td>'
-      + '<td>' + badge(l.status) + '</td>'
-      + '<td><div style="display:flex;gap:3px">'
-      + (l.status !== 'returned' ? '<button class="btn" style="padding:2px 7px;font-size:11px" onclick="returnLoan(' + l._id + ')">归还</button>' : '')
-      + '<button class="btn btn-danger" style="padding:2px 7px;font-size:11px" onclick="deleteLoan(' + l._id + ')"><i class="ti ti-trash"></i></button>'
-      + '</div></td></tr>';
-  }).join('');
-  document.getElementById('loans-body').innerHTML = html || '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--color-text-secondary)">暂无记录</td></tr>';
+  const rows = loans.filter(l => l.status === loanTab);
+  const html = rows.map(l =>
+    '<tr><td style="font-family:monospace;font-size:10px;color:#888">'+l.id+'</td>'
+    +'<td>'+l.item+'</td>'
+    +'<td><div style="display:flex;align-items:center;gap:5px"><div class="avatar">'+l.borrower.charAt(0)+'</div><span>'+l.borrower+'</span></div></td>'
+    +'<td>'+l.type+'</td>'
+    +'<td style="color:#888">'+l.lend+'</td>'
+    +'<td style="color:'+(l.status==='overdue'?'#791F1F':'#888')+'">'+l.due+'</td>'
+    +'<td style="font-family:monospace;font-size:10px">'+l.track+'</td>'
+    +'<td>'+badge(l.status)+'</td>'
+    +'<td><div style="display:flex;gap:3px">'
+    +(l.status!=='returned'?'<button class="btn" style="padding:2px 7px;font-size:11px" onclick="returnLoan(\''+l.id+'\')">归还</button>':'')
+    +'<button class="btn btn-danger" style="padding:2px 7px;font-size:11px" onclick="deleteLoan(\''+l.id+'\')"><i class="ti ti-trash"></i></button>'
+    +'</div></td></tr>'
+  ).join('');
+  document.getElementById('loans-body').innerHTML = html || '<tr><td colspan="9" style="text-align:center;padding:24px;color:#aaa">暂无记录</td></tr>';
 }
 
 function setLT(tab, el) {
   loanTab = tab;
-  document.querySelectorAll('.ptab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   renderLoans();
 }
 
-function returnLoan(dbid) {
-  api('/api/loans/' + dbid, {method: 'PUT', body: {status: 'returned'}}).then(function() {
-    var l = loans.find(function(x) { return x._id === dbid; });
-    if (l) { l.status = 'returned'; toast('已标记归还：' + l.id); }
-    renderLoans();
-    loadAll();
-  }).catch(function(e) { toast('操作失败: ' + e.message); });
+async function returnLoan(id) {
+  await db('loans', 'PATCH', {status:'returned'}, 'id=eq.' + encodeURIComponent(id));
+  const l = loans.find(x => x.id === id);
+  if (l) l.status = 'returned';
+  renderLoans();
+  toast('已标记归还：' + id);
 }
 
-function deleteLoan(dbid) {
-  if (!confirm('确认删除该借用记录？')) return;
-  api('/api/loans/' + dbid, {method: 'DELETE'}).then(function() {
-    loans = loans.filter(function(x) { return x._id !== dbid; });
-    renderLoans();
-    toast('已删除借用记录');
-  }).catch(function(e) { toast('删除失败: ' + e.message); });
+async function deleteLoan(id) {
+  if (!confirm('确认删除这条借用记录？')) return;
+  await db('loans', 'DELETE', null, 'id=eq.' + encodeURIComponent(id));
+  loans = loans.filter(x => x.id !== id);
+  renderLoans();
+  toast('已删除借用记录');
 }
 
-// ========== Tracking ==========
 function renderTracking() {
-  var html = trackings.map(function(t) {
-    return '<tr style="cursor:pointer" onclick="showTrack(\'' + esc(t.no) + '\')">'
-      + '<td style="font-family:var(--font-mono);font-size:10px">' + esc(t.no) + '</td>'
-      + '<td>' + esc(t.carrier) + '</td><td style="color:var(--color-text-secondary)">' + esc(t.from) + '</td>'
-      + '<td style="color:var(--color-text-secondary)">' + esc(t.to) + '</td>'
-      + '<td>' + esc(t.item) + '</td>'
-      + '<td>' + badge(t.status) + '</td>'
-      + '<td><button class="btn btn-danger" style="padding:2px 7px;font-size:11px" onclick="event.stopPropagation();deleteTrack(' + t._id + ')"><i class="ti ti-trash"></i></button></td>'
-      + '</tr>';
-  }).join('');
-  document.getElementById('track-body').innerHTML = html || '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--color-text-secondary)">暂无运单</td></tr>';
+  const html = trackings.map(t =>
+    '<tr style="cursor:pointer" onclick="showTrack(\''+t.no+'\')">'
+    +'<td style="font-family:monospace;font-size:10px">'+t.no+'</td>'
+    +'<td>'+t.carrier+'</td>'
+    +'<td style="color:#888">'+t.from+'</td>'
+    +'<td style="color:#888">'+t.to+'</td>'
+    +'<td>'+t.item+'</td>'
+    +'<td>'+badge(t.status)+'</td>'
+    +'<td><button class="btn btn-danger" style="padding:2px 7px;font-size:11px" onclick="event.stopPropagation();deleteTrack(\''+t.no+'\')"><i class="ti ti-trash"></i></button></td>'
+    +'</tr>'
+  ).join('');
+  document.getElementById('track-body').innerHTML = html || '<tr><td colspan="7" style="text-align:center;padding:24px;color:#aaa">暂无运单</td></tr>';
   if (trackings.length > 0) showTrack(trackings[0].no);
-  else document.getElementById('track-detail').innerHTML = '<div style="padding:14px;color:var(--color-text-secondary);font-size:12px">选择左侧运单查看详情</div>';
 }
 
-function showTrack(no) {
-  var t = trackings.find(function(x) { return x.no === no; });
-  if (!t) return;
-  api('/api/express/' + encodeURIComponent(no)).then(function(data) {
-    var traces = data.traces || [];
-    var stepsHtml = traces.length > 0
-      ? traces.map(function(tr, i) {
-          var cls = i === 0 ? 'act' : 'done';
-          return '<div class="track-step"><div class="tdot ' + cls + '"><i class="ti ti-package"></i></div><div><div style="font-size:12px">' + esc(tr.context) + '</div><div style="font-size:10px;color:var(--color-text-secondary)">' + esc(tr.ftime) + '</div></div></div>';
-        }).join('')
-      : '<div class="track-step"><div class="tdot pend"><i class="ti ti-package"></i></div><div><div style="font-size:12px">暂无物流信息</div><div style="font-size:10px;color:var(--color-text-secondary)">请稍后刷新</div></div></div>';
-    document.getElementById('track-detail').innerHTML =
-      '<div style="margin-bottom:10px"><div style="font-size:12px;font-weight:500">' + esc(t.item) + '</div><div style="font-size:11px;color:var(--color-text-secondary)">' + esc(t.carrier) + ' · ' + esc(t.no) + '</div></div>' + stepsHtml;
-  }).catch(function() {
-    document.getElementById('track-detail').innerHTML =
-      '<div style="margin-bottom:10px"><div style="font-size:12px;font-weight:500">' + esc(t.item) + '</div><div style="font-size:11px;color:var(--color-text-secondary)">' + esc(t.carrier) + ' · ' + esc(t.no) + '</div></div>'
-      + '<div style="color:var(--color-text-secondary);font-size:12px">物流查询暂不可用</div>';
+const KD_EBUSINESS_ID = '1922454';
+const KD_API_KEY = '1ff4963d-b427-4901-afb9-5788b998aba0';
+
+// 顺丰快递鸟编码
+const CARRIER_CODE_MAP = {
+  '顺丰': 'SF', '顺丰速运': 'SF',
+  '圆通': 'YTO', '圆通快递': 'YTO',
+  '中通': 'ZTO', '中通快递': 'ZTO',
+  '京东': 'JD', '京东物流': 'JD',
+  '韵达': 'YD', '韵达快递': 'YD',
+  '申通': 'STO', '申通快递': 'STO',
+  '邮政': 'YZPY', '中国邮政': 'YZPY',
+  '极兔': 'JTSD',
+};
+
+async function md5(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function queryKDNiao(no, carrierName) {
+  const shipperCode = CARRIER_CODE_MAP[carrierName] || 'SF';
+  const reqData = JSON.stringify({OrderCode:'',ShipperCode:shipperCode,LogisticCode:no});
+  const toSign = reqData + KD_EBUSINESS_ID + KD_API_KEY;
+  // 使用 btoa 做简单 base64 签名（快递鸟 MD5+Base64）
+  const encoder = new TextEncoder();
+  const data = encoder.encode(toSign);
+  const hashBuffer = await crypto.subtle.digest('MD5', data).catch(() => null);
+  // 浏览器不支持 MD5，改用代理服务
+  // 直接调用快递鸟免费查询接口（需后端代理解决跨域）
+  // 这里使用 allorigins 代理
+  const params = new URLSearchParams({
+    RequestData: encodeURIComponent(reqData),
+    EBusinessID: KD_EBUSINESS_ID,
+    RequestType: '1002',
+    DataSign: btoa(toSign),
+    DataType: '2'
   });
-}
-
-function deleteTrack(dbid) {
-  if (!confirm('确认删除该运单？')) return;
-  api('/api/trackings/' + dbid, {method: 'DELETE'}).then(function() {
-    trackings = trackings.filter(function(x) { return x._id !== dbid; });
-    renderTracking();
-    toast('已删除运单');
-  }).catch(function(e) { toast('删除失败: ' + e.message); });
-}
-
-// ========== Stats ==========
-function renderStats() {
-  if (!statsCache) return;
-  var s = statsCache;
-  document.getElementById('stats-cards').innerHTML =
-    '<div class="stat-card"><div class="stat-label">平均借用周期</div><div class="stat-value">' + esc(s.avg_cycle) + '</div><div class="stat-delta">较上月</div></div>'
-    + '<div class="stat-card"><div class="stat-label">样衣利用率</div><div class="stat-value" style="color:#27500A">' + s.utilization + '%</div><div class="stat-delta">较上月</div></div>'
-    + '<div class="stat-card"><div class="stat-label">逾期率</div><div class="stat-value" style="color:#633806">' + esc(s.overdue_rate) + '</div><div class="stat-delta">较上月</div></div>'
-    + '<div class="stat-card"><div class="stat-label">本月流转次数</div><div class="stat-value">' + s.month_flow + ' 次</div><div class="stat-delta">较上月</div></div>';
-
-  var list = s.stats_list || [];
-  var h = list.map(function(b) {
-    return '<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="avatar">' + esc(b.name.charAt(0)) + '</div>' + esc(b.name) + '</div></td>'
-      + '<td>' + esc(b.type) + '</td><td style="font-weight:500">' + b.count + '</td><td>' + b.avg + ' 天</td>'
-      + '<td style="color:' + (b.overdue > 0 ? '#791F1F' : 'inherit') + '">' + b.overdue + '</td>'
-      + '<td><span class="sbadge ' + (b.rating === 'A' ? 's-in' : 's-lent') + '">' + esc(b.rating) + '</span></td></tr>';
-  }).join('');
-  document.getElementById('stats-body').innerHTML = h || '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--color-text-secondary)">暂无数据</td></tr>';
-
-  var bars = (s.chart_data && s.chart_data.length > 0) ? s.chart_data : [45, 38, 52, 41, 63, 72];
-  var bc = document.getElementById('chart-bars');
-  if (bc) bc.innerHTML = bars.map(function(v, i) {
-    return '<div class="bar-col"><div class="bar' + (i === 5 ? ' hi' : '') + '" style="height:' + v + 'px"></div></div>';
-  }).join('');
-}
-
-// ========== Contacts ==========
-function renderContacts() {
-  var html = contacts.map(function(c) {
-    return '<div class="ccard">'
-      + '<div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">'
-      + '<div class="avatar" style="width:36px;height:36px;font-size:13px">' + esc(c.name.charAt(0)) + '</div>'
-      + '<div><div style="font-size:12px;font-weight:500">' + esc(c.name) + '</div><div style="font-size:11px;color:var(--color-text-secondary)">' + esc(c.handle) + '</div></div>'
-      + '</div>'
-      + '<div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:11px">'
-      + '<span style="color:var(--color-text-secondary)">类型</span><span>' + esc(c.type) + '</span>'
-      + '<span style="color:var(--color-text-secondary)">平台</span><span>' + esc(c.platform) + '</span>'
-      + '<span style="color:var(--color-text-secondary)">粉丝</span><span>' + esc(c.fans) + '</span>'
-      + '<span style="color:var(--color-text-secondary)">借用</span><span style="font-weight:500">' + c.loans + ' 次</span>'
-      + '</div>'
-      + '<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;just-content:space-between">'
-      + '<span class="sbadge ' + (c.rating === 'A' ? 's-in' : 's-lent') + '">评级 ' + esc(c.rating) + '</span>'
-      + '<button class="btn btn-danger" style="padding:2px 7px;font-size:11px" onclick="deleteContact(' + c._id + ')"><i class="ti ti-trash"></i></button>'
-      + '</div></div>';
-  }).join('');
-  document.getElementById('contact-grid').innerHTML = html || '<div style="color:var(--color-text-secondary);font-size:13px;padding:20px">暂无联系人</div>';
-}
-
-function deleteContact(dbid) {
-  if (!confirm('确认删除该联系人？')) return;
-  api('/api/contacts/' + dbid, {method: 'DELETE'}).then(function() {
-    contacts = contacts.filter(function(x) { return x._id !== dbid; });
-    renderContacts();
-    toast('已删除联系人');
-  }).catch(function(e) { toast('删除失败: ' + e.message); });
-}
-
-// ========== Modal ==========
-function openModal(type) {
-  modalAction = type;
-  var cfg = {
-    'add-item': {title: '添加样衣', body:
-      '<div class="mb-3"><label class="form-label" style="font-size:11px;font-weight:500">样衣编号</label><input class="form-control form-control-sm" id="f-id" placeholder="如 PR-099"></div>'
-      + '<div class="mb-3"><label class="form-label" style="font-size:11px;font-weight:500">样衣名称</label><input class="form-control form-control-sm" id="f-name" placeholder="如：白色蕾丝连衣裙"></div>'
-      + '<div class="row g-2"><div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">品类</label><select class="form-select form-select-sm" id="f-cat"><option>连衣裙</option><option>外套</option><option>上装</option><option>下装</option><option>礼服</option><option>套装</option></select></div>'
-      + '<div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">尺码</label><select class="form-select form-select-sm" id="f-size"><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></div></div>'
-      + '<div class="mb-3"><label class="form-label" style="font-size:11px;font-weight:500">颜色</label><input class="form-control form-control-sm" id="f-color" placeholder="主色调"></div>'},
-    'lend-item': {title: '借出样衣', body:
-      '<input type="hidden" id="lend-item-id">'
-      + '<div class="mb-3"><label class="form-label" style="font-size:11px;font-weight:500">借用方姓名</label><input class="form-control form-control-sm" id="f-borrower" placeholder="博主/摄影师姓名"></div>'
-      + '<div class="row g-2"><div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">借出日期</label><input class="form-control form-control-sm" id="f-lend" type="date"></div>'
-      + '<div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">归还截止日</label><input class="form-control form-control-sm" id="f-due" type="date"></div></div>'
-      + '<div class="mb-3"><label class="form-label" style="font-size:11px;font-weight:500">快递单号（可选）</label><input class="form-control form-control-sm" id="f-track" placeholder="如已发货请填写"></div>'},
-    'new-loan': {title: '新建借用记录', body:
-      '<div class="mb-3"><label class="form-label" style="font-size:11px;font-weight:500">样衣</label><select class="form-select form-select-sm" id="f-loan-item">'
-      + items.filter(function(x) { return x.status === 'in'; }).map(function(x) { return '<option value="' + esc(x.id) + '">' + esc(x.id) + ' ' + esc(x.name) + '</option>'; }).join('')
-      + '</select></div>'
-      + '<div class="mb-3"><label class="form-label" style="font-size:11px;font-weight:500">借用方</label><input class="form-control form-control-sm" id="f-loan-borrower" placeholder="博主/摄影师/媒体名称"></div>'
-      + '<div class="row g-2"><div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">类型</label><select class="form-select form-select-sm" id="f-loan-type"><option>博主</option><option>摄影师</option><option>媒体</option></select></div>'
-      + '<div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">归还截止日</label><input class="form-control form-control-sm" id="f-loan-due" type="date"></div></div>'},
-    'add-track': {title: '添加快递单号', body:
-      '<div class="row g-2"><div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">快递公司</label><select class="form-select form-select-sm" id="f-carrier"><option>顺丰速运</option><option>圆通快递</option><option>中通快递</option><option>京东物流</option><option>韵达快递</option></select></div>'
-      + '<div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">运单号</label><input class="form-control form-control-sm" id="f-tno" placeholder="输入快递单号"></div></div>'
-      + '<div class="row g-2"><div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">寄件方</label><input class="form-control form-control-sm" id="f-tfrom" placeholder="如：PR仓库"></div>'
-      + '<div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">收件方</label><input class="form-control form-control-sm" id="f-tto" placeholder="收件方姓名"></div></div>'
-      + '<div class="mb-3"><label class="form-label" style="font-size:11px;font-weight:500">关联样衣</label><input class="form-control form-control-sm" id="f-titem" placeholder="样衣名称"></div>'},
-    'add-contact': {title: '添加联系人', body:
-      '<div class="row g-2"><div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">姓名</label><input class="form-control form-control-sm" id="f-cname"></div>'
-      + '<div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">账号/机构</label><input class="form-control form-control-sm" id="f-chandle" placeholder="@账号或机构名"></div></div>'
-      + '<div class="row g-2"><div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">类型</label><select class="form-select form-select-sm" id="f-ctype"><option>博主</option><option>摄影师</option><option>媒体</option></select></div>'
-      + '<div class="col-6"><label class="form-label" style="font-size:11px;font-weight:500">平台</label><select class="form-select form-select-sm" id="f-cplat"><option>小红书</option><option>微博</option><option>抖音</option><option>Instagram</option><option>杂志/媒体</option></select></div></div>'
-      + '<div class="mb-3"><label class="form-label" style="font-size:11px;font-weight:500">粉丝量</label><input class="form-control form-control-sm" id="f-cfans" placeholder="如：120万"></div>'},
-  };
-  var c = cfg[type];
-  if (!c) return;
-  document.getElementById('m-title').textContent = c.title;
-  document.getElementById('m-body').innerHTML = c.body;
-  bsModal.show();
-}
-
-function confirmModal() {
-  if (modalAction === 'add-item') {
-    var id = document.getElementById('f-id').value.trim();
-    var name = document.getElementById('f-name').value.trim();
-    var cat = document.getElementById('f-cat').value;
-    var size = document.getElementById('f-size').value;
-    var color = document.getElementById('f-color').value.trim();
-    if (!id || !name) { toast('请填写编号和名称'); return; }
-    api('/api/samples', {method: 'POST', body: {id: id, name: name, cat: cat, size: size, color: color || '—', status: 'in', borrower: '', due: ''}}).then(function(r) {
-      items.push({id: id, name: name, cat: cat, size: size, color: color || '—', status: 'in', borrower: '', due: '', _id: r._id});
-      renderInv();
-      toast('已添加样衣：' + name);
-      bsModal.hide();
-    }).catch(function(e) { toast('添加失败: ' + e.message); });
-  } else if (modalAction === 'lend-item') {
-    var itemId = document.getElementById('lend-item-id').value;
-    var borrower = document.getElementById('f-borrower').value.trim();
-    var due = document.getElementById('f-due').value;
-    var lendDate = document.getElementById('f-lend').value;
-    var track = document.getElementById('f-track').value.trim();
-    if (!borrower) { toast('请填写借用方姓名'); return; }
-    var it = items.find(function(x) { return x.id === itemId; });
-    if (!it) return;
-    api('/api/samples/' + it._id, {method: 'PUT', body: {status: 'lent', borrower: borrower, due: due || '—'}}).then(function() {
-      it.status = 'lent'; it.borrower = borrower; it.due = due || '—';
-      var today = new Date().toISOString().slice(0, 10);
-      var newId = 'LN-' + String(loans.length + 100);
-      return api('/api/loans', {method: 'POST', body: {id: newId, item: itemId + ' ' + it.name, borrower: borrower, type: '博主', lend: lendDate || today, due: due || '—', track: track || '—', status: 'active'}});
-    }).then(function(r) {
-      var today = new Date().toISOString().slice(0, 10);
-      loans.unshift({id: 'LN-' + String(loans.length + 100), item: itemId + ' ' + it.name, borrower: borrower, type: '博主', lend: lendDate || today, due: due || '—', track: track || '—', status: 'active', _id: r._id});
-      renderInv();
-      toast('已借出：' + itemId);
-      bsModal.hide();
-    }).catch(function(e) { toast('操作失败: ' + e.message); });
-  } else if (modalAction === 'new-loan') {
-    var iid = document.getElementById('f-loan-item').value;
-    var bwr = document.getElementById('f-loan-borrower').value.trim();
-    var typ = document.getElementById('f-loan-type').value;
-    var dueL = document.getElementById('f-loan-due').value;
-    if (!iid || !bwr) { toast('请选择样衣并填写借用方'); return; }
-    var newId = 'LN-' + String(loans.length + 100);
-    var today = new Date().toISOString().slice(0, 10);
-    api('/api/loans', {method: 'POST', body: {id: newId, item: iid, borrower: bwr, type: typ, lend: today, due: dueL || '—', track: '—', status: 'active'}}).then(function(r) {
-      loans.unshift({id: newId, item: iid, borrower: bwr, type: typ, lend: today, due: dueL || '—', track: '—', status: 'active', _id: r._id});
-      renderLoans();
-      toast('已创建借用记录：' + newId);
-      bsModal.hide();
-      loadAll();
-    }).catch(function(e) { toast('创建失败: ' + e.message); });
-  } else if (modalAction === 'add-track') {
-    var no = document.getElementById('f-tno').value.trim();
-    var carrier = document.getElementById('f-carrier').value;
-    var from = document.getElementById('f-tfrom').value.trim() || 'PR仓库';
-    var to = document.getElementById('f-tto').value.trim() || '—';
-    var titem = document.getElementById('f-titem').value.trim() || '—';
-    if (!no) { toast('请填写运单号'); return; }
-    api('/api/trackings', {method: 'POST', body: {no: no, carrier: carrier, from: from, to: to, item: titem, status: 'transit'}}).then(function(r) {
-      trackings.unshift({no: no, carrier: carrier, from: from, to: to, item: titem, status: 'transit', _id: r._id});
-      renderTracking();
-      toast('已添加运单：' + no);
-      bsModal.hide();
-    }).catch(function(e) { toast('添加失败: ' + e.message); });
-  } else if (modalAction === 'add-contact') {
-    var cn = document.getElementById('f-cname').value.trim();
-    var ch = document.getElementById('f-chandle').value.trim();
-    var ct = document.getElementById('f-ctype').value;
-    var cp = document.getElementById('f-cplat').value;
-    var cf = document.getElementById('f-cfans').value.trim() || '—';
-    if (!cn) { toast('请填写姓名'); return; }
-    api('/api/contacts', {method: 'POST', body: {name: cn, handle: ch || '—', type: ct, platform: cp, fans: cf, loans: 0, rating: 'A'}}).then(function(r) {
-      contacts.push({name: cn, handle: ch || '—', type: ct, platform: cp, fans: cf, loans: 0, rating: 'A', _id: r._id});
-      renderContacts();
-      toast('已添加联系人：' + cn);
-      bsModal.hide();
-    }).catch(function(e) { toast('添加失败: ' + e.message); });
+  try {
+    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx');
+    const resp = await fetch(proxyUrl, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: params.toString()
+    });
+    const json = await resp.json();
+    return json;
+  } catch(e) {
+    return null;
   }
 }
 
-// ========== Navigation ==========
-function go(page) {
-  var pages = ['inventory', 'loans', 'tracking', 'stats', 'contacts'];
-  pages.forEach(function(p) {
-    document.getElementById('pg-' + p).style.display = p === page ? '' : 'none';
-    var n = document.getElementById('nav-' + p);
-    if (n) n.classList.toggle('active', p === page);
+async function showTrack(no) {
+  const t = trackings.find(x => x.no === no);
+  if (!t) return;
+  const detail = document.getElementById('track-detail');
+  detail.innerHTML = '<div style="margin-bottom:10px"><div style="font-size:12px;font-weight:500">'+t.item+'</div><div style="font-size:11px;color:#888">'+t.carrier+' · '+t.no+'</div></div><div class="loading"><div class="spinner"></div>查询物流中...</div>';
+
+  // 调用快递鸟 API
+  const shipperCode = CARRIER_CODE_MAP[t.carrier] || 'SF';
+  const reqData = JSON.stringify({OrderCode:'',ShipperCode:shipperCode,LogisticCode:no});
+
+  // 生成签名：MD5(RequestData+EBusinessID+ApiKey) 转 Base64
+  // 浏览器原生不支持 MD5，使用 spark-md5
+  let dataSign = '';
+  try {
+    if (typeof SparkMD5 !== 'undefined') {
+      dataSign = btoa(SparkMD5.hash(reqData + KD_EBUSINESS_ID + KD_API_KEY));
+    }
+  } catch(e) {}
+
+  let traces = null;
+  if (dataSign) {
+    try {
+      const params = 'RequestData='+encodeURIComponent(reqData)+'&EBusinessID='+KD_EBUSINESS_ID+'&RequestType=1002&DataSign='+encodeURIComponent(dataSign)+'&DataType=2';
+      const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx');
+      const resp = await fetch(proxyUrl, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:params});
+      const json = await resp.json();
+      if (json.Success && json.Traces) traces = json.Traces;
+    } catch(e) {}
+  }
+
+  if (traces && traces.length > 0) {
+    // 真实物流轨迹
+    const latest = traces[traces.length - 1];
+    // 更新数据库状态
+    let newStatus = 'transit';
+    if (json && json.State === '3') newStatus = 'delivered';
+    if (json && json.State === '4') newStatus = 'abnormal';
+    detail.innerHTML =
+      '<div style="margin-bottom:12px"><div style="font-size:12px;font-weight:500">'+t.item+'</div><div style="font-size:11px;color:#888">'+t.carrier+' · '+t.no+'</div></div>'
+      + traces.slice().reverse().map((tr,i) =>
+        '<div class="track-step"><div class="tdot '+(i===0?'act':'done')+'"><i class="ti '+(i===0?'ti-map-pin':'ti-circle-check')+'"></i></div>'
+        +'<div><div style="font-size:12px;font-weight:500">'+tr.AcceptStation+'</div>'
+        +'<div style="font-size:11px;color:#888">'+tr.AcceptTime+'</div></div></div>'
+      ).join('');
+  } else {
+    // 无法查询时显示手动状态
+    const steps = [
+      {l:'揽收',d:'快递员已取件',s:'done',ic:'ti-package'},
+      {l:'运输中',d:['transit','delivered','abnormal'].includes(t.status)?'已进入运输网络':'等待揽收',s:t.status!=='in'?'done':'pend',ic:'ti-truck'},
+      {l:'派送',d:t.status==='delivered'?'已成功签收':t.status==='abnormal'?'派送失败':t.status==='transit'?'等待派送':'—',s:t.status==='delivered'?'done':t.status==='transit'?'act':'pend',ic:'ti-map-pin'},
+      {l:'签收',d:t.status==='delivered'?'已签收':'等待签收',s:t.status==='delivered'?'done':'pend',ic:'ti-circle-check'},
+    ];
+    detail.innerHTML =
+      '<div style="margin-bottom:10px"><div style="font-size:12px;font-weight:500">'+t.item+'</div><div style="font-size:11px;color:#888">'+t.carrier+' · '+t.no+'</div></div>'
+      + steps.map(s => '<div class="track-step"><div class="tdot '+s.s+'"><i class="ti '+s.ic+'"></i></div><div><div style="font-size:12px;font-weight:500">'+s.l+'</div><div style="font-size:11px;color:#888">'+s.d+'</div></div></div>').join('')
+      + '<div style="font-size:11px;color:#aaa;margin-top:8px;padding-top:8px;border-top:0.5px solid rgba(0,0,0,0.06)">⚠️ 实时查询暂不可用，显示手动状态</div>';
+  }
+}
+
+async function deleteTrack(no) {
+  if (!confirm('确认删除运单 ' + no + '？')) return;
+  await db('trackings', 'DELETE', null, 'no=eq.' + encodeURIComponent(no));
+  trackings = trackings.filter(x => x.no !== no);
+  renderTracking();
+  toast('已删除运单');
+}
+
+function renderStats() {
+  const total = items.length;
+  const inStock = items.filter(x => x.status === 'in').length;
+  const lentCount = items.filter(x => x.status === 'lent' || x.status === 'transit').length;
+  const overdueCount = items.filter(x => x.status === 'overdue').length;
+  document.getElementById('kpi-total').textContent = total;
+  document.getElementById('kpi-in').textContent = inStock;
+  document.getElementById('kpi-lent').textContent = lentCount;
+  document.getElementById('kpi-overdue').textContent = overdueCount;
+
+  const borrowerMap = {};
+  loans.forEach(l => {
+    if (!borrowerMap[l.borrower]) borrowerMap[l.borrower] = {name:l.borrower,type:l.type,count:0};
+    borrowerMap[l.borrower].count++;
   });
-  if (page === 'loans') renderLoans();
-  else if (page === 'tracking') renderTracking();
-  else if (page === 'stats') { api('/api/stats').then(function(d) { statsCache = d; renderStats(); }); }
-  else if (page === 'contacts') renderContacts();
+  const sorted = Object.values(borrowerMap).sort((a,b) => b.count - a.count);
+  document.getElementById('stats-body').innerHTML = sorted.map(b =>
+    '<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="avatar">'+b.name.charAt(0)+'</div>'+b.name+'</div></td>'
+    +'<td>'+b.type+'</td><td style="font-weight:500">'+b.count+'</td>'
+    +'<td><span class="sbadge '+(b.count>=5?'s-in':'s-lent')+'">'+(b.count>=5?'A':'B')+'</span></td>'
+    +'</tr>'
+  ).join('') || '<tr><td colspan="4" style="text-align:center;padding:20px;color:#aaa">暂无数据</td></tr>';
 }
 
-// ========== Helpers ==========
+function renderContacts() {
+  const html = contacts.map(c =>
+    '<div class="ccard">'
+    +'<div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">'
+    +'<div class="avatar" style="width:36px;height:36px;font-size:13px">'+c.name.charAt(0)+'</div>'
+    +'<div><div style="font-size:12px;font-weight:500">'+c.name+'</div><div style="font-size:11px;color:#888">'+c.handle+'</div></div>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:11px">'
+    +'<span style="color:#888">类型</span><span>'+c.type+'</span>'
+    +'<span style="color:#888">平台</span><span>'+c.platform+'</span>'
+    +'<span style="color:#888">粉丝</span><span>'+c.fans+'</span>'
+    +'<span style="color:#888">借用</span><span style="font-weight:500">'+c.loans+' 次</span>'
+    +'</div>'
+    +'<div style="margin-top:10px;padding-top:10px;border-top:0.5px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between">'
+    +'<span class="sbadge '+(c.rating==='A'?'s-in':'s-lent')+'">评级 '+c.rating+'</span>'
+    +'<button class="btn btn-danger" style="padding:2px 7px;font-size:11px" onclick="deleteContact(\''+c.name+'\')"><i class="ti ti-trash"></i></button>'
+    +'</div></div>'
+  ).join('');
+  document.getElementById('contact-grid').innerHTML = html || '<div style="color:#aaa;font-size:13px;padding:20px">暂无联系人</div>';
+}
+
+async function deleteContact(name) {
+  if (!confirm('确认删除联系人 ' + name + '？')) return;
+  await db('contacts', 'DELETE', null, 'name=eq.' + encodeURIComponent(name));
+  contacts = contacts.filter(x => x.name !== name);
+  renderContacts();
+  toast('已删除联系人');
+}
+
+function openModal(type) {
+  modalAction = type;
+  const cfg = {
+    'add-item': {title:'添加样衣', body:'<div class="frow"><div class="fg"><label class="fl">样衣编号</label><input class="fi" id="f-id" placeholder="如 PR-099" type="text"></div><div class="fg"><label class="fl">品类</label><input class="fi" id="f-cat" placeholder="如：连衣裙、外套、套装…" type="text"></div></div><div class="fg"><label class="fl">样衣名称</label><input class="fi" id="f-name" placeholder="如：白色蕾丝连衣裙" type="text"></div><div class="frow"><div class="fg"><label class="fl">尺码</label><input class="fi" id="f-size" placeholder="如：S、M、L、38、均码…" type="text"></div><div class="fg"><label class="fl">颜色</label><input class="fi" id="f-color" placeholder="如：白、黑、米色…" type="text"></div></div><div class="frow"><div class="fg"><label class="fl">季节</label><input class="fi" id="f-season" placeholder="如：春夏、秋冬、全季…" type="text"></div><div class="fg"><label class="fl">备注</label><input class="fi" id="f-note" placeholder="其他说明（可选）" type="text"></div></div>'},
+    'lend-item': {title:'借出样衣', body:'<input type="hidden" id="lend-item-id"><div class="fg"><label class="fl">借用方姓名</label><input class="fi" id="f-borrower" placeholder="博主/摄影师姓名" type="text"></div><div class="frow"><div class="fg"><label class="fl">借出日期</label><input class="fi" id="f-lend" type="date"></div><div class="fg"><label class="fl">归还截止日</label><input class="fi" id="f-due" type="date"></div></div><div class="fg"><label class="fl">快递单号（可选）</label><input class="fi" id="f-track" placeholder="如已发货请填写" type="text"></div>'},
+    'new-loan': {title:'新建借用记录', body:'<div class="fg"><label class="fl">样衣编号</label><input class="fi" id="f-loan-item" placeholder="输入样衣编号，如 PR-001" type="text"></div><div class="fg"><label class="fl">样衣名称</label><input class="fi" id="f-loan-name" placeholder="样衣名称（可选）" type="text"></div><div class="fg"><label class="fl">借用方</label><input class="fi" id="f-loan-borrower" placeholder="博主/摄影师/媒体名称" type="text"></div><div class="frow"><div class="fg"><label class="fl">类型</label><input class="fi" id="f-loan-type" placeholder="如：博主、摄影师、媒体…" type="text"></div><div class="fg"><label class="fl">归还截止日</label><input class="fi" id="f-loan-due" type="date"></div></div><div style="border-top:0.5px solid rgba(0,0,0,0.08);margin:4px 0;padding-top:12px"><div style="font-size:11px;color:#888;font-weight:500;margin-bottom:8px">快递信息（可选）</div><div class="frow"><div class="fg"><label class="fl">快递公司</label><input class="fi" id="f-loan-carrier" placeholder="如：顺丰、圆通、中通…" type="text" value="顺丰速运"></div><div class="fg"><label class="fl">快递单号</label><input class="fi" id="f-loan-track" placeholder="填写后自动追踪" type="text"></div></div><div class="frow"><div class="fg"><label class="fl">寄件方</label><input class="fi" id="f-loan-from" placeholder="默认：PR仓库" type="text"></div><div class="fg"><label class="fl">收件方地址</label><input class="fi" id="f-loan-to" placeholder="收件人姓名/地址" type="text"></div></div></div>'},
+    'add-track': {title:'添加快递单号', body:'<div class="frow"><div class="fg"><label class="fl">快递公司</label><input class="fi" id="f-carrier" placeholder="如：顺丰、圆通、中通…" type="text" value="顺丰速运"></div><div class="fg"><label class="fl">运单号</label><input class="fi" id="f-tno" placeholder="输入快递单号" type="text"></div></div><div class="frow"><div class="fg"><label class="fl">寄件方</label><input class="fi" id="f-tfrom" placeholder="如：PR仓库" type="text"></div><div class="fg"><label class="fl">收件方</label><input class="fi" id="f-tto" placeholder="收件方姓名" type="text"></div></div><div class="fg"><label class="fl">关联样衣</label><input class="fi" id="f-titem" placeholder="样衣名称" type="text"></div>'},
+    'add-contact': {title:'添加联系人', body:'<div class="frow"><div class="fg"><label class="fl">姓名</label><input class="fi" id="f-cname" type="text" placeholder="真实姓名或昵称"></div><div class="fg"><label class="fl">账号/机构</label><input class="fi" id="f-chandle" placeholder="@账号或机构名" type="text"></div></div><div class="frow"><div class="fg"><label class="fl">类型</label><input class="fi" id="f-ctype" placeholder="如：博主、摄影师、媒体…" type="text"></div><div class="fg"><label class="fl">平台</label><input class="fi" id="f-cplat" placeholder="如：小红书、微博、抖音…" type="text"></div></div><div class="frow"><div class="fg"><label class="fl">粉丝量</label><input class="fi" id="f-cfans" placeholder="如：120万" type="text"></div><div class="fg"><label class="fl">联系方式</label><input class="fi" id="f-ccontact" placeholder="手机/微信（可选）" type="text"></div></div>'},
+  };
+  const c = cfg[type];
+  if (!c) return;
+  document.getElementById('m-title').textContent = c.title;
+  document.getElementById('m-body').innerHTML = c.body;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function bgClick(e) { if (e.target === document.getElementById('modal-overlay')) closeModal(); }
+
+async function confirmModal() {
+  const btn = document.getElementById('m-confirm');
+  btn.disabled = true;
+  try {
+    if (modalAction === 'add-item') {
+      const id = document.getElementById('f-id').value.trim();
+      const name = document.getElementById('f-name').value.trim();
+      const cat = document.getElementById('f-cat').value.trim();
+      const size = document.getElementById('f-size').value.trim();
+      const color = document.getElementById('f-color').value.trim();
+      const season = (document.getElementById('f-season')||{value:''}).value.trim();
+      const note = (document.getElementById('f-note')||{value:''}).value.trim();
+      if (!id || !name) { toast('请填写编号和名称'); btn.disabled=false; return; }
+      if (items.find(x => x.id === id)) { toast('编号已存在'); btn.disabled=false; return; }
+      const rec = {id, name, cat:cat||'—', size:size||'—', color:color||'—', status:'in', borrower:'', due:''};
+      await db('items', 'POST', rec);
+      items.unshift(rec);
+      renderInv();
+      toast('已添加样衣：' + name);
+
+    } else if (modalAction === 'lend-item') {
+      const itemId = document.getElementById('lend-item-id').value;
+      const borrower = document.getElementById('f-borrower').value.trim();
+      const due = document.getElementById('f-due').value;
+      if (!borrower) { toast('请填写借用方姓名'); btn.disabled=false; return; }
+      await db('items', 'PATCH', {status:'lent', borrower, due:due||'—'}, 'id=eq.'+encodeURIComponent(itemId));
+      const it = items.find(x => x.id === itemId);
+      if (it) { it.status='lent'; it.borrower=borrower; it.due=due||'—'; }
+      renderInv();
+      toast('已借出：' + itemId);
+
+    } else if (modalAction === 'new-loan') {
+      const iid = document.getElementById('f-loan-item').value.trim();
+      const loanName = (document.getElementById('f-loan-name')||{value:''}).value.trim();
+      const bwr = document.getElementById('f-loan-borrower').value.trim();
+      const typ = document.getElementById('f-loan-type').value.trim() || '—';
+      const dueL = document.getElementById('f-loan-due').value;
+      const carrier = (document.getElementById('f-loan-carrier')||{value:''}).value.trim();
+      const trackNo = (document.getElementById('f-loan-track')||{value:''}).value.trim();
+      const fromAddr = (document.getElementById('f-loan-from')||{value:''}).value.trim() || 'PR仓库';
+      const toAddr = (document.getElementById('f-loan-to')||{value:''}).value.trim() || bwr;
+      if (!iid || !bwr) { toast('请填写样衣编号和借用方'); btn.disabled=false; return; }
+      const newId = 'LN-' + Date.now().toString().slice(-6);
+      const today = new Date().toISOString().slice(0,10);
+      const itemLabel = loanName ? iid + ' ' + loanName : iid;
+      const rec = {id:newId, item:itemLabel, borrower:bwr, type:typ, lend:today, due:dueL||'—', track:trackNo||'—', status:'active'};
+      await db('loans', 'POST', rec);
+      await db('items', 'PATCH', {status:'lent', borrower:bwr, due:dueL||'—'}, 'id=eq.'+encodeURIComponent(iid));
+      loans.unshift(rec);
+      const it2 = items.find(x => x.id === iid);
+      if (it2) { it2.status='lent'; it2.borrower=bwr; it2.due=dueL||'—'; }
+      // 如果填了快递单号，自动创建追踪记录
+      if (trackNo) {
+        const tRec = {no:trackNo, carrier:carrier||'—', from:fromAddr, to:toAddr, item:itemLabel, status:'transit'};
+        try { await db('trackings', 'POST', tRec); trackings.unshift(tRec); } catch(e) {}
+        toast('已创建借用记录并同步快递追踪：' + newId);
+      } else {
+        toast('已创建借用记录：' + newId);
+      }
+      renderLoans();
+
+    } else if (modalAction === 'add-track') {
+      const no = document.getElementById('f-tno').value.trim();
+      const carrier = document.getElementById('f-carrier').value.trim() || '顺丰速运';
+      const from = document.getElementById('f-tfrom').value.trim() || 'PR仓库';
+      const to = document.getElementById('f-tto').value.trim() || '—';
+      const titem = document.getElementById('f-titem').value.trim() || '—';
+      if (!no) { toast('请填写运单号'); btn.disabled=false; return; }
+      const rec = {no, carrier, from, to, item:titem, status:'transit'};
+      await db('trackings', 'POST', rec);
+      trackings.unshift(rec);
+      renderTracking();
+      toast('已添加运单：' + no);
+
+    } else if (modalAction === 'add-contact') {
+      const cn = document.getElementById('f-cname').value.trim();
+      const ch = document.getElementById('f-chandle').value.trim();
+      const ct = document.getElementById('f-ctype').value.trim() || '—';
+      const cp = document.getElementById('f-cplat').value.trim() || '—';
+      const cf = document.getElementById('f-cfans').value.trim() || '—';
+      if (!cn) { toast('请填写姓名'); btn.disabled=false; return; }
+      const rec = {name:cn, handle:ch||'—', type:ct, platform:cp, fans:cf, loans:0, rating:'A'};
+      await db('contacts', 'POST', rec);
+      contacts.push(rec);
+      renderContacts();
+      toast('已添加联系人：' + cn);
+    }
+    closeModal();
+  } catch(e) {
+    // error already shown in db()
+  }
+  btn.disabled = false;
+}
+
 function toast(msg) {
-  var t = document.getElementById('toast');
+  const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
-  setTimeout(function() { t.classList.remove('show'); }, 2200);
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-function esc(s) {
-  if (!s) return '';
-  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+async function go(page) {
+  ['inventory','loans','tracking','stats','contacts'].forEach(p => {
+    document.getElementById('pg-'+p).style.display = p===page ? '' : 'none';
+    const n = document.getElementById('nav-'+p);
+    if (n) n.classList.toggle('active', p===page);
+  });
+  if (page==='inventory') await loadItems();
+  else if (page==='loans') await loadLoans();
+  else if (page==='tracking') await loadTrackings();
+  else if (page==='stats') { await loadItems(); await loadLoans(); renderStats(); }
+  else if (page==='contacts') await loadContacts();
 }
+
+// 初始化
+loadItems();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
