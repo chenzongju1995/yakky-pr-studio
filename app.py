@@ -1,8 +1,9 @@
-import os
 import hashlib
 import base64
 import urllib.request
+import urllib.parse
 import json
+import os
 from flask import Flask, send_file, request, jsonify
 
 app = Flask(__name__)
@@ -20,14 +21,17 @@ def index():
 @app.route('/api/track', methods=['POST'])
 def api_track():
     data = request.get_json()
-    req_data = json.dumps({
+    req_obj = {
         'OrderCode': '',
         'ShipperCode': data.get('ShipperCode', 'SF'),
         'LogisticCode': data.get('LogisticCode', '')
-    })
-    data_sign = base64.b64encode(
-        hashlib.md5((req_data + KD_API_KEY).encode()).digest()
-    ).decode()
+    }
+    customer_name = data.get('CustomerName', '')
+    if customer_name:
+        req_obj['CustomerName'] = customer_name
+    req_data = json.dumps(req_obj)
+    md5_hex = hashlib.md5((req_data + KD_API_KEY).encode()).hexdigest()
+    data_sign = base64.b64encode(md5_hex.encode()).decode()
     body = urllib.parse.urlencode({
         'RequestData': req_data,
         'EBusinessID': KD_EBUSINESS_ID,
